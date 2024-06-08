@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tree3.dao.FollowingMapper">
+
+    <resultMap type="com.tree3.pojo.entity.Following" id="FollowingMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="uid" column="uid" jdbcType="INTEGER"/>
+        <result property="followingId" column="following_id" jdbcType="INTEGER"/>
+        <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+        <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+        <result property="deletedAt" column="deleted_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--全部字段-->
+    <sql id="allColumn"> id
+    , uid, following_id, created_at, updated_at, deleted_at </sql>
+
+    <!--分页查询-->
+    <sql id="pageConfig">
+        <if test="offset != null and pageSize != null ">
+            limit #{offset} ,#{pageSize}
+        </if>
+    </sql>
+
+    <!--通用对Following各个属性的值的非空判断-->
+    <sql id="commonsValue">
+        <if test="uid != null">
+            uid = #{uid},
+        </if>
+        <if test="followingId != null">
+            following_id = #{followingId},
+        </if>
+        <if test="createdAt != null">
+            created_at = #{createdAt},
+        </if>
+        <if test="updatedAt != null">
+            updated_at = #{updatedAt},
+        </if>
+        <if test="deletedAt != null">
+            deleted_at = #{deletedAt},
+        </if>
+    </sql>
+
+    <!--添加语句的字段列表-->
+    <sql id="insertColumn">
+        <if test="uid != null">
+            uid,
+        </if>
+        <if test="followingId != null">
+            following_id,
+        </if>
+        <if test="createdAt != null">
+            created_at,
+        </if>
+        <if test="updatedAt != null">
+            updated_at,
+        </if>
+        <if test="deletedAt != null">
+            deleted_at,
+        </if>
+    </sql>
+
+    <!--添加语句的值列表-->
+    <sql id="insertValue">
+        <if test="uid != null">
+            #{uid},
+        </if>
+        <if test="followingId != null">
+            #{followingId},
+        </if>
+        <if test="createdAt != null">
+            #{createdAt},
+        </if>
+        <if test="updatedAt != null">
+            #{updatedAt},
+        </if>
+        <if test="deletedAt != null">
+            #{deletedAt},
+        </if>
+    </sql>
+
+    <!--多条件查询的条件-->
+    <sql id="queryCondition">
+        <if test="id != null">
+            and id = #{id}
+        </if>
+
+        <if test="uid != null">
+            and uid = #{uid}
+        </if>
+        <if test="followingId != null">
+            and following_id = #{followingId}
+        </if>
+        <if test="createdAt != null">
+            and created_at = #{createdAt}
+        </if>
+        <if test="updatedAt != null">
+            and updated_at = #{updatedAt}
+        </if>
+        <if test="deletedAt != null">
+            and deleted_at = #{deletedAt}
+        </if>
+    </sql>
+
+    <!--多条件查询的条件-->
+    <sql id="entityQueryCondition">
+        <if test="following.id != null">
+            and id = #{following.id}
+        </if>
+
+        <if test="following.uid != null">
+            and uid = #{following.uid}
+        </if>
+        <if test="following.followingId != null">
+            and following_id = #{following.followingId}
+        </if>
+        <if test="following.createdAt != null">
+            and created_at = #{following.createdAt}
+        </if>
+        <if test="following.updatedAt != null">
+            and updated_at = #{following.updatedAt}
+        </if>
+        <if test="following.deletedAt != null">
+            and deleted_at = #{following.deletedAt}
+        </if>
+    </sql>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="FollowingMap">
+        select
+        <include refid="allColumn"></include>
+        from following
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryFollowings" resultMap="FollowingMap">
+        select
+        <include refid="allColumn"></include>
+        from following
+        <trim prefix="where" prefixOverrides="and" suffixOverrides=",">
+            <if test="offset == null and pageSize == null ">
+                <include refid="queryCondition"></include>
+            </if>
+            <if test="offset != null and pageSize != null ">
+                <include refid="entityQueryCondition"></include>
+            </if>
+        </trim>
+        <include refid="pageConfig"></include>
+    </select>
+
+    <!--条件查询单个元素-->
+    <select id="queryFollowing" resultMap="FollowingMap">
+        select
+        <include refid="allColumn"></include>
+        from following
+        <trim prefix="where" prefixOverrides="and" suffixOverrides=",">
+            <include refid="queryCondition"></include>
+        </trim>
+    </select>
+
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from following
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="uid != null">
+                and uid = #{uid}
+            </if>
+            <if test="followingId != null">
+                and following_id = #{followingId}
+            </if>
+            <if test="createdAt != null">
+                and created_at = #{createdAt}
+            </if>
+            <if test="updatedAt != null">
+                and updated_at = #{updatedAt}
+            </if>
+            <if test="deletedAt != null">
+                and deleted_at = #{deletedAt}
+            </if>
+        </where>
+    </select>
+
+
+    <!--通过主键修改数据,不使用动态`where标签`的原因：防止主键不传参，直接对全表数据进行写操作-->
+    <update id="update">
+        update following
+        <set>
+            <include refid="commonsValue"></include>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除,不使用动态`where标签`的原因：防止主键不传参，直接对全表数据进行写操作-->
+    <delete id="deleteById">
+        delete
+        from following
+        where id = #{id}
+    </delete>
+
+
+    <!--通过实体类删除,不使用动态`where标签`的原因：防止主键不传参，直接对全表数据进行写操作-->
+    <delete id="deleteByFollowing">
+        delete
+        from following
+        where
+        <trim prefix="" prefixOverrides="and" suffixOverrides=",">
+            <include refid="queryCondition"></include>
+        </trim>
+    </delete>
+
+
+    <!--新增following:哪个字段不为空就添加哪列数据,返回自增主键-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into following
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="insertColumn"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <include refid="insertValue"/>
+        </trim>
+    </insert>
+
+    <!--批量插入-->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into following(uid, following_id, created_at, updated_at, deleted_at)
+        values
+        <foreach collection="followings" item="following" separator=",">
+            (#{following.uid}, #{following.followingId}, #{following.createdAt}, #{following.updatedAt},
+            #{following.deletedAt})
+        </foreach>
+    </insert>
+
+    <!--批量插入或更新-->
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into following(id,uid, following_id, created_at, updated_at, deleted_at)
+        values
+        <foreach collection="followings" item="following" separator=",">
+            (#{following.id},#{following.uid}, #{following.followingId}, #{following.createdAt}, #{following.updatedAt},
+            #{following.deletedAt})
+        </foreach>
+        on duplicate key update
+        uid = values(uid),
+        following_id = values(following_id),
+        created_at = values(created_at),
+        updated_at = values(updated_at),
+        deleted_at = values(deleted_at)
+    </insert>
+
+</mapper>
+

@@ -1,0 +1,25 @@
+server:
+  port: 9103
+
+spring:
+  application:
+    name: API-CATEGORYS
+  cloud:
+    nacos:
+      server-addr: 192.168.154.101:8848
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.154.101:3306/vshare?characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: root
+
+
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: com.tree3.mapper.pojo.entity
+
+
+logging:
+  level:
+    com.tree3.dao: debug
+    com.tree3.controller: debug

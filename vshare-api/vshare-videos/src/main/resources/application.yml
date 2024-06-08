@@ -1,0 +1,35 @@
+server:
+  port: 9105
+
+spring:
+  application:
+    name: API-VIDEOS
+  cloud:
+    nacos:
+      server-addr: 192.168.154.101:8848
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.154.101:3306/vshare?characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: root
+
+  redis:
+    host: 192.168.154.101
+    port: 6379
+  rabbitmq:
+    host: 192.168.154.101
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: / #类似于数据库概念
+
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: com.tree3.mapper.pojo.entity
+
+logging:
+  level:
+    com.tree3.dao: debug
+    com.tree3.controller: debug
+    com.tree3.service: debug

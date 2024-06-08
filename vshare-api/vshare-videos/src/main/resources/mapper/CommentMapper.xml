@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tree3.dao.CommentMapper">
+
+    <resultMap type="com.tree3.pojo.entity.Comment" id="CommentMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="uid" column="uid" jdbcType="INTEGER"/>
+        <result property="videoId" column="video_id" jdbcType="INTEGER"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="parentId" column="parent_id" jdbcType="INTEGER"/>
+        <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+        <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+        <result property="deletedAt" column="deleted_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--全部字段-->
+    <sql id="allColumn"> id
+    , uid, video_id, content, parent_id, created_at, updated_at, deleted_at </sql>
+
+    <!--通用对Comment各个属性的值的非空判断-->
+    <sql id="commonsValue">
+        <if test="uid != null">
+            uid = #{uid},
+        </if>
+        <if test="videoId != null">
+            video_id = #{videoId},
+        </if>
+        <if test="content != null and content != ''">
+            content = #{content},
+        </if>
+        <if test="parentId != null">
+            parent_id = #{parentId},
+        </if>
+        <if test="createdAt != null">
+            created_at = #{createdAt},
+        </if>
+        <if test="updatedAt != null">
+            updated_at = #{updatedAt},
+        </if>
+        <if test="deletedAt != null">
+            deleted_at = #{deletedAt},
+        </if>
+    </sql>
+
+    <!--添加语句的字段列表-->
+    <sql id="insertColumn">
+        <if test="uid != null">
+            uid,
+        </if>
+        <if test="videoId != null">
+            video_id,
+        </if>
+        <if test="content != null and content != ''">
+            content,
+        </if>
+        <if test="parentId != null">
+            parent_id,
+        </if>
+        <if test="createdAt != null">
+            created_at,
+        </if>
+        <if test="updatedAt != null">
+            updated_at,
+        </if>
+        <if test="deletedAt != null">
+            deleted_at,
+        </if>
+    </sql>
+
+    <!--添加语句的值列表-->
+    <sql id="insertValue">
+        <if test="uid != null">
+            #{uid},
+        </if>
+        <if test="videoId != null">
+            #{videoId},
+        </if>
+        <if test="content != null and content != ''">
+            #{content},
+        </if>
+        <if test="parentId != null">
+            #{parentId},
+        </if>
+        <if test="createdAt != null">
+            #{createdAt},
+        </if>
+        <if test="updatedAt != null">
+            #{updatedAt},
+        </if>
+        <if test="deletedAt != null">
+            #{deletedAt},
+        </if>
+    </sql>
+
+    <!--多条件查询的条件-->
+    <sql id="queryCondition">
+        <if test="id != null">
+            and id = #{id}
+        </if>
+
+        <if test="uid != null">
+            and uid = #{uid}
+        </if>
+        <if test="videoId != null">
+            and video_id = #{videoId}
+        </if>
+        <if test="content != null and content != ''">
+            and content = #{content}
+        </if>
+        <if test="parentId != null">
+            and parent_id = #{parentId}
+        </if>
+        <if test="createdAt != null">
+            and created_at = #{createdAt}
+        </if>
+        <if test="updatedAt != null">
+            and updated_at = #{updatedAt}
+        </if>
+        <if test="deletedAt != null">
+            and deleted_at = #{deletedAt}
+        </if>
+    </sql>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="CommentMap">
+        select
+        <include refid="allColumn"></include>
+        from comment
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="CommentMap">
+        select
+        <include refid="allColumn"></include>
+        from comment
+        <trim prefix="where" prefixOverrides="and" suffixOverrides=",">
+            <include refid="queryCondition"></include>
+        </trim>
+        <if test="offset != null and pageSize != null">
+            limit #{offset},#{pageSize}
+        </if>
+    </select>
+
+    <select id="queryAllComment" resultType="com.tree3.pojo.entity.Comment">
+        select
+        id
+        , uid, video_id, content, parent_id, created_at, updated_at, deleted_at
+        from comment
+        <where>
+            <if test="comment.id != null">
+                and id = #{comment.id}
+            </if>
+
+            <if test="comment.uid != null">
+                and uid = #{comment.uid}
+            </if>
+            <if test="comment.videoId != null">
+                and video_id = #{comment.videoId}
+            </if>
+            <if test="comment.content != null and comment.content != ''">
+                and content = #{comment.content}
+            </if>
+            <if test="comment.parentId != null">
+                and parent_id = #{comment.parentId}
+            </if>
+            <if test="comment.createdAt != null">
+                and created_at = #{comment.createdAt}
+            </if>
+            <if test="comment.updatedAt != null">
+                and updated_at = #{comment.updatedAt}
+            </if>
+            <if test="comment.deletedAt != null">
+                and deleted_at = #{comment.deletedAt}
+            </if>
+        </where>
+
+        <if test="offset != null and pageSize != null">
+            limit #{offset},#{pageSize}
+        </if>
+    </select>
+
+    <!--条件查询单个元素-->
+    <select id="queryComment" resultMap="CommentMap">
+        select
+        <include refid="allColumn"></include>
+        from comment
+        <trim prefix="where" prefixOverrides="and" suffixOverrides=",">
+            <include refid="queryCondition"></include>
+        </trim>
+    </select>
+
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from comment
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="uid != null">
+                and uid = #{uid}
+            </if>
+            <if test="videoId != null">
+                and video_id = #{videoId}
+            </if>
+            <if test="content != null and content != ''">
+                and content = #{content}
+            </if>
+            <if test="parentId != null">
+                and parent_id = #{parentId}
+            </if>
+            <if test="createdAt != null">
+                and created_at = #{createdAt}
+            </if>
+            <if test="updatedAt != null">
+                and updated_at = #{updatedAt}
+            </if>
+            <if test="deletedAt != null">
+                and deleted_at = #{deletedAt}
+            </if>
+        </where>
+    </select>
+    <select id="findByParentId" resultType="com.tree3.pojo.entity.Comment">
+        select
+        <include refid="allColumn"></include>
+        from comment
+        where parent_id=#{id}
+    </select>
+    <!--根据视频id查询视频详情-->
+    <select id="findByVideoIdCounts" resultType="Long">
+        select count(id)
+        from comment
+        where video_id = #{id}
+    </select>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update comment
+        <set>
+            <include refid="commonsValue"></include>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from comment
+        where id = #{id}
+    </delete>
+
+
+    <!--新增comment:哪个字段不为空就添加哪列数据,返回自增主键-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="insertColumn"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <include refid="insertValue"/>
+        </trim>
+    </insert>
+
+    <!--批量插入-->
+    <insert id="insertBatch" useGeneratedKeys="true">
+        insert into comment(uid, video_id, content, parent_id, created_at, updated_at, deleted_at)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.uid}, #{entity.videoId}, #{entity.content}, #{entity.parentId}, #{entity.createdAt},
+            #{entity.updatedAt}, #{entity.deletedAt})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" useGeneratedKeys="true">
+        insert into comment(uid, video_id, content, parent_id, created_at, updated_at, deleted_at)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.uid}, #{entity.videoId}, #{entity.content}, #{entity.parentId}, #{entity.createdAt},
+            #{entity.updatedAt}, #{entity.deletedAt})
+        </foreach>
+        on duplicate key update
+        uid = values(uid),
+        video_id = values(video_id),
+        content = values(content),
+        parent_id = values(parent_id),
+        created_at = values(created_at),
+        updated_at = values(updated_at),
+        deleted_at = values(deleted_at)
+    </insert>
+
+</mapper>
+

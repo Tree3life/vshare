@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tree3.dao.CategoryMapper">
+
+    <resultMap type="com.tree3.pojo.entity.Category" id="CategoryMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="parentId" column="parent_id" jdbcType="INTEGER"/>
+        <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+        <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+        <result property="deletedAt" column="deleted_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap type="com.tree3.pojo.entity.Category" id="CategorysMap">
+        <result property="id" column="cid" jdbcType="INTEGER"/>
+        <result property="name" column="cname" jdbcType="VARCHAR"/>
+        <collection property="children" ofType="com.tree3.pojo.entity.Category">
+            <result property="id" column="sid" jdbcType="INTEGER"/>
+            <result property="name" column="sname" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <!--全部字段-->
+    <sql id="allColumn"> id
+    , name, parent_id, created_at, updated_at, deleted_at </sql>
+
+    <!--通用对Category各个属性的值的非空判断-->
+    <sql id="commonsValue">
+        <if test="name != null and name != ''">
+            name = #{name},
+        </if>
+        <if test="parentId != null">
+            parent_id = #{parentId},
+        </if>
+        <if test="createdAt != null">
+            created_at = #{createdAt},
+        </if>
+        <if test="updatedAt != null">
+            updated_at = #{updatedAt},
+        </if>
+        <if test="deletedAt != null">
+            deleted_at = #{deletedAt},
+        </if>
+    </sql>
+
+    <!--添加语句的字段列表-->
+    <sql id="insertColumn">
+        <if test="name != null and name != ''">
+            name,
+        </if>
+        <if test="parentId != null">
+            parent_id,
+        </if>
+        <if test="createdAt != null">
+            created_at,
+        </if>
+        <if test="updatedAt != null">
+            updated_at,
+        </if>
+        <if test="deletedAt != null">
+            deleted_at,
+        </if>
+    </sql>
+
+    <!--添加语句的值列表-->
+    <sql id="insertValue">
+        <if test="name != null and name != ''">
+            #{name},
+        </if>
+        <if test="parentId != null">
+            #{parentId},
+        </if>
+        <if test="createdAt != null">
+            #{createdAt},
+        </if>
+        <if test="updatedAt != null">
+            #{updatedAt},
+        </if>
+        <if test="deletedAt != null">
+            #{deletedAt},
+        </if>
+    </sql>
+
+    <!--多条件查询的条件-->
+    <sql id="queryCondition">
+        <if test="id != null">
+            and id = #{id}
+        </if>
+
+        <if test="name != null and name != ''">
+            and name = #{name}
+        </if>
+        <if test="parentId != null">
+            and parent_id = #{parentId}
+        </if>
+        <if test="createdAt != null">
+            and created_at = #{createdAt}
+        </if>
+        <if test="updatedAt != null">
+            and updated_at = #{updatedAt}
+        </if>
+        <if test="deletedAt != null">
+            and deleted_at = #{deletedAt}
+        </if>
+    </sql>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="CategoryMap">
+        select
+        <include refid="allColumn"></include>
+        from category
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="CategoryMap">
+        select
+        <include refid="allColumn"></include>
+        from category
+        <trim prefix="where" prefixOverrides="and" suffixOverrides=",">
+            <include refid="queryCondition"></include>
+        </trim>
+    </select>
+
+    <!--条件查询单个元素-->
+    <select id="queryCategory" resultMap="CategoryMap">
+        select
+        <include refid="allColumn"></include>
+        from category
+        <trim prefix="where" prefixOverrides="and" suffixOverrides=",">
+            <include refid="queryCondition"></include>
+        </trim>
+    </select>
+
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from category
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="parentId != null">
+                and parent_id = #{parentId}
+            </if>
+            <if test="createdAt != null">
+                and created_at = #{createdAt}
+            </if>
+            <if test="updatedAt != null">
+                and updated_at = #{updatedAt}
+            </if>
+            <if test="deletedAt != null">
+                and deleted_at = #{deletedAt}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryCategorys" resultMap="CategorysMap">
+
+        SELECT
+            c.id cid,
+            c.name cname,
+            s.id sid,
+            s.name sname
+        FROM
+            category c
+                LEFT JOIN category s ON c.id = s.parent_id
+        WHERE
+            c.parent_id IS NULL
+
+
+    </select>
+
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update category
+        <set>
+            <include refid="commonsValue"></include>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from category
+        where id = #{id}
+    </delete>
+
+
+    <!--新增category:哪个字段不为空就添加哪列数据,返回自增主键-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="insertColumn"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <include refid="insertValue"/>
+        </trim>
+    </insert>
+
+    <!--批量插入-->
+    <insert id="insertBatch" useGeneratedKeys="true">
+        insert into category(name, parent_id, created_at, updated_at, deleted_at)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.parentId}, #{entity.createdAt}, #{entity.updatedAt}, #{entity.deletedAt})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" useGeneratedKeys="true">
+        insert into category(name, parent_id, created_at, updated_at, deleted_at)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.parentId}, #{entity.createdAt}, #{entity.updatedAt}, #{entity.deletedAt})
+        </foreach>
+        on duplicate key update
+        name = values(name),
+        parent_id = values(parent_id),
+        created_at = values(created_at),
+        updated_at = values(updated_at),
+        deleted_at = values(deleted_at)
+    </insert>
+
+</mapper>
+

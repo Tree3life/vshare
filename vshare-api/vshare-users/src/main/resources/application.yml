@@ -1,0 +1,51 @@
+server:
+  port: 9104
+
+spring:
+  application:
+    name: API-USERS
+  cloud:
+    nacos:
+      server-addr: 192.168.154.101:8848
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.154.101:3306/vshare?characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: root
+
+  #限制上传文件的大小
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  redis:
+    host: 192.168.154.101
+    port: 6379
+
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: com.tree3.mapper.pojo.entity
+
+#设置openfeign调用超时
+feign:
+  client:
+    config:
+      default:
+        # 超时设置 1.5 秒超时 1500
+#        connectTimeout: 1500
+#        readTimeout: 1500
+        connectTimeout: 100000
+        readTimeout: 100000
+        # 日志级别
+        loggerLevel: full
+#        # 断路器
+#  circuitbreaker:
+#    enabled: true
+
+
+
+logging:
+  level:
+    com.tree3.dao: debug
+    com.tree3.controller: trace
+

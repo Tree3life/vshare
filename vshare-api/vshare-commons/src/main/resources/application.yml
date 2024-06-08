@@ -1,0 +1,22 @@
+server:
+  port: 9101
+
+spring:
+  application:
+    name: VSHARE-COMMONS
+#  mvc:
+#    throw-exception-if-no-handler-found: true
+#  web:
+#    resources:
+#      add-mappings: false
+#  web:
+#    resources:
+#      add-mappings: false
+
+#  cloud:
+#    nacos:
+#      server-addr: 192.168.154.101:8848
+#logging:
+#  level:
+#    com.tree3.dao: debug
+#    com.tree3.controller: debug

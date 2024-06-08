@@ -14,6 +14,8 @@ target/
 !**/src/main/**
 !**/src/test/**
 
+**/sysfunc/**
+
 
 ### STS ###
 .apt_generated

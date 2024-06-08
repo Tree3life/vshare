@@ -1,0 +1,59 @@
+server:
+  port: 9100
+
+spring:
+  cloud:
+    nacos:
+      #服务发现
+      server-addr: 192.168.154.101:8848
+
+    #网关配置
+    gateway:
+      routes:
+        # 短信服务
+        - id: sms_router
+          uri: lb://API-SMS
+          predicates:
+            - Path=/api/captchas/**
+          filters:
+            - StripPrefix=1
+
+        # 搜索服务
+        - id: search_router
+          uri: lb://API-SEARCH
+          predicates:
+            - Path=/api/search/**
+          filters:
+            - StripPrefix=1
+
+        #业务模块
+        - id: category_router
+          uri: lb://API-CATEGORYS
+          predicates:
+            - Path=/api/categories/** #以网关地址接收到的路径    from
+          filters:
+            - StripPrefix=1  #去掉请求前缀filter int数字  1:去掉一级 2:去掉两级
+
+        - id: users_router
+          uri: lb://API-USERS #转发至              to ；以负载均衡的方式，将请求转发至对应的服务集群进行处理
+          predicates:
+            - Path=/api/token/**,/api/tokens/**,/api/user/** ,/api/followings/** #以网关地址接收到的路径    from
+          filters:
+            - StripPrefix=1  #去掉请求前缀filter int数字  1:去掉一级 2:去掉两级
+
+        - id: videos_router
+          uri: lb://API-VIDEOS #转发至              to ；以负载均衡的方式，将请求转发至对应的服务集群进行处理
+          predicates:
+            - Path=/api/videos/** ,/api/recommends #以网关地址接收到的路径    from
+          filters:
+            - StripPrefix=1  #去掉请求前缀filter int数字  1:去掉一级 2:去掉两级
+
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*" #允许所有域名访问
+            allowedMethods: "*" #允许所有请求方式访问
+            allowedHeaders: "*" #允许所有请求头可以访问
+
+  application:
+    name: API-GATEWAY

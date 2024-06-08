@@ -1,0 +1,20 @@
+server:
+  port: 9107
+spring:
+  application:
+    name: API-SMS
+  cloud:
+    nacos:
+      server-addr: 192.168.154.101:8848
+  redis:
+    host: 192.168.154.101
+    port: 6379
+
+sms:
+  accesskeyId: xxxxxxxxxxxxxxx
+  secret: xxxxxxxxxx
+  signName: xxxxxxx
+  templateCode: xxxxxxxxxxxxxxx
+  regionId: xxxxxxxxxx
+
+
