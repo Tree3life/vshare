@@ -1,0 +1,63 @@
+server:
+  port: 9000
+
+spring:
+  application:
+    name: API-GATEWAY
+  cloud:
+    nacos:
+      #服务发现
+      server-addr: 192.168.154.101:8848
+
+    #网关配置
+    gateway:
+      routes: #配置路由规则
+        #网关处接收到的路径为`http://网关地址:网关端口号/Path`
+        # 原理：将 `http://网关地址:网关端口号/Path`对应的请求 ,
+        #经过相应的过滤器组处理后   转发至   `uri`处所配置的服务
+        - id: admins_router
+          #         uri: http://localhost:9002/demos #转发至              to；指定单个确定的服务
+          uri: lb://API-ADMINS #转发至              to ；以负载均衡的方式，将请求转发至对应的服务集群进行处理
+          predicates:
+            #           - Path=/admins/demos #以网关地址接收到的路径    from
+            - Path=/admin/tokens,/admin/admin-user,/admin/tokens/**
+          filters:
+            #为StripPrefixGatewayFilterFactory中的parts属性赋值
+            - StripPrefix=1  #去掉请求前缀filter int数字  1:去掉一级 2:去掉两级
+
+        - id: category_router
+          #         uri: http://localhost:9002/demos #转发至              to；指定单个确定的服务
+          uri: lb://API-CATEGORY #转发至              to ；以负载均衡的方式，将请求转发至对应的服务集群进行处理
+          predicates:
+            - Path=/admin/categories/** #以网关地址接收到的路径    from
+          filters:
+            - StripPrefix=1  #去掉请求前缀filter int数字  1:去掉一级 2:去掉两级
+            #为DiyTokenGatewayFilterFactory中的requiredToken和name属性赋值
+#            - DiyToken=true
+
+        - id: users_router
+          #         uri: http://localhost:9002/demos #转发至              to；指定单个确定的服务
+          uri: lb://API-USERS #转发至              to ；以负载均衡的方式，将请求转发至对应的服务集群进行处理
+          predicates:
+            - Path=/admin/users/** #以网关地址接收到的路径    from
+          filters:
+            - StripPrefix=1  #去掉请求前缀filter int数字  1:去掉一级 2:去掉两级
+            #为DiyTokenGatewayFilterFactory中的requiredToken和name属性赋值
+#            - DiyToken=true
+
+        - id: videos_router
+          #         uri: http://localhost:9002/demos #转发至              to；指定单个确定的服务
+          uri: lb://API-VIDEOS #转发至              to ；以负载均衡的方式，将请求转发至对应的服务集群进行处理
+          predicates:
+            - Path=/admin/videos/** #以网关地址接收到的路径    from
+          filters:
+            - StripPrefix=1  #去掉请求前缀filter int数字  1:去掉一级 2:去掉两级
+            #为DiyTokenGatewayFilterFactory中的requiredToken和name属性赋值
+#            - DiyToken=true
+
+      globalcors: # 跨域配置处理
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"

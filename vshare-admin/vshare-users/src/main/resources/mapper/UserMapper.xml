@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tree3.dao.UserMapper">
+
+    <resultMap type="com.tree3.pojo.entity.User" id="UserMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+        <result property="intro" column="intro" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="phoneLinked" column="phone_linked" jdbcType="BOOLEAN"/>
+        <result property="openid" column="openid" jdbcType="VARCHAR"/>
+        <result property="wechatLinked" column="wechat_linked" jdbcType="BOOLEAN"/>
+        <result property="followingCount" column="following_count" jdbcType="INTEGER"/>
+        <result property="followersCount" column="followers_count" jdbcType="INTEGER"/>
+        <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+        <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+        <result property="deletedAt" column="deleted_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--全部字段-->
+    <sql id="allColumn"> id
+    , name, avatar, intro, phone, phone_linked, openid, wechat_linked, following_count, followers_count, created_at, updated_at, deleted_at </sql>
+
+    <!--通用对User各个属性的值的非空判断-->
+    <sql id="commonsValue">
+        <if test="name != null and name != ''">
+            name = #{name},
+        </if>
+        <if test="avatar != null and avatar != ''">
+            avatar = #{avatar},
+        </if>
+        <if test="intro != null and intro != ''">
+            intro = #{intro},
+        </if>
+        <if test="phone != null and phone != ''">
+            phone = #{phone},
+        </if>
+        <if test="phoneLinked != null">
+            phone_linked = #{phoneLinked},
+        </if>
+        <if test="openid != null and openid != ''">
+            openid = #{openid},
+        </if>
+        <if test="wechatLinked != null">
+            wechat_linked = #{wechatLinked},
+        </if>
+        <if test="followingCount != null">
+            following_count = #{followingCount},
+        </if>
+        <if test="followersCount != null">
+            followers_count = #{followersCount},
+        </if>
+        <if test="createdAt != null">
+            created_at = #{createdAt},
+        </if>
+        <if test="updatedAt != null">
+            updated_at = #{updatedAt},
+        </if>
+        <if test="deletedAt != null">
+            deleted_at = #{deletedAt},
+        </if>
+    </sql>
+
+    <!--添加语句的字段列表-->
+    <sql id="insertColumn">
+        <if test="name != null and name != ''">
+            name,
+        </if>
+        <if test="avatar != null and avatar != ''">
+            avatar,
+        </if>
+        <if test="intro != null and intro != ''">
+            intro,
+        </if>
+        <if test="phone != null and phone != ''">
+            phone,
+        </if>
+        <if test="phoneLinked != null">
+            phone_linked,
+        </if>
+        <if test="openid != null and openid != ''">
+            openid,
+        </if>
+        <if test="wechatLinked != null">
+            wechat_linked,
+        </if>
+        <if test="followingCount != null">
+            following_count,
+        </if>
+        <if test="followersCount != null">
+            followers_count,
+        </if>
+        <if test="createdAt != null">
+            created_at,
+        </if>
+        <if test="updatedAt != null">
+            updated_at,
+        </if>
+        <if test="deletedAt != null">
+            deleted_at,
+        </if>
+    </sql>
+
+    <!--添加语句的值列表-->
+    <sql id="insertValue">
+        <if test="name != null and name != ''">
+            #{name},
+        </if>
+        <if test="avatar != null and avatar != ''">
+            #{avatar},
+        </if>
+        <if test="intro != null and intro != ''">
+            #{intro},
+        </if>
+        <if test="phone != null and phone != ''">
+            #{phone},
+        </if>
+        <if test="phoneLinked != null">
+            #{phoneLinked},
+        </if>
+        <if test="openid != null and openid != ''">
+            #{openid},
+        </if>
+        <if test="wechatLinked != null">
+            #{wechatLinked},
+        </if>
+        <if test="followingCount != null">
+            #{followingCount},
+        </if>
+        <if test="followersCount != null">
+            #{followersCount},
+        </if>
+        <if test="createdAt != null">
+            #{createdAt},
+        </if>
+        <if test="updatedAt != null">
+            #{updatedAt},
+        </if>
+        <if test="deletedAt != null">
+            #{deletedAt},
+        </if>
+    </sql>
+
+    <!--多条件查询的条件-->
+    <sql id="queryCondition">
+        <if test="id != null">
+            and id = #{id}
+        </if>
+
+        <if test="name != null and name != ''">
+            and name = #{name}
+        </if>
+        <if test="avatar != null and avatar != ''">
+            and avatar = #{avatar}
+        </if>
+        <if test="intro != null and intro != ''">
+            and intro = #{intro}
+        </if>
+        <if test="phone != null and phone != ''">
+            and phone = #{phone}
+        </if>
+        <if test="phoneLinked != null">
+            and phone_linked = #{phoneLinked}
+        </if>
+        <if test="openid != null and openid != ''">
+            and openid = #{openid}
+        </if>
+        <if test="wechatLinked != null">
+            and wechat_linked = #{wechatLinked}
+        </if>
+        <if test="followingCount != null">
+            and following_count = #{followingCount}
+        </if>
+        <if test="followersCount != null">
+            and followers_count = #{followersCount}
+        </if>
+        <if test="createdAt != null">
+            and created_at = #{createdAt}
+        </if>
+        <if test="updatedAt != null">
+            and updated_at = #{updatedAt}
+        </if>
+        <if test="deletedAt != null">
+            and deleted_at = #{deletedAt}
+        </if>
+
+
+    </sql>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="UserMap">
+        select
+        <include refid="allColumn"></include>
+        from user
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <select id="countAll" resultType="java.lang.Integer">
+        select
+        count(id)
+        from user
+        <trim prefix="where" prefixOverrides="and" suffixOverrides=",">
+            <include refid="queryCondition"></include>
+        </trim>
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="UserMap">
+        select
+        <include refid="allColumn"></include>
+        from user
+        <trim prefix="where" prefixOverrides="and" suffixOverrides=",">
+            <include refid="queryCondition"></include>
+        </trim>
+
+
+        <if test="offset != null  and pageSize  != null ">
+            limit #{offset}, #{pageSize}
+        </if>
+
+    </select>
+
+    <!--条件查询单个元素-->
+    <select id="queryUser" resultMap="UserMap">
+        select
+        <include refid="allColumn"></include>
+        from user
+        <trim prefix="where" prefixOverrides="and" suffixOverrides=",">
+            <include refid="queryCondition"></include>
+        </trim>
+    </select>
+
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from user
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="avatar != null and avatar != ''">
+                and avatar = #{avatar}
+            </if>
+            <if test="intro != null and intro != ''">
+                and intro = #{intro}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone = #{phone}
+            </if>
+            <if test="phoneLinked != null">
+                and phone_linked = #{phoneLinked}
+            </if>
+            <if test="openid != null and openid != ''">
+                and openid = #{openid}
+            </if>
+            <if test="wechatLinked != null">
+                and wechat_linked = #{wechatLinked}
+            </if>
+            <if test="followingCount != null">
+                and following_count = #{followingCount}
+            </if>
+            <if test="followersCount != null">
+                and followers_count = #{followersCount}
+            </if>
+            <if test="createdAt != null">
+                and created_at = #{createdAt}
+            </if>
+            <if test="updatedAt != null">
+                and updated_at = #{updatedAt}
+            </if>
+            <if test="deletedAt != null">
+                and deleted_at = #{deletedAt}
+            </if>
+        </where>
+    </select>
+
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update user
+        <set>
+            <include refid="commonsValue"></include>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from user
+        where id = #{id}
+    </delete>
+
+
+    <!--新增user:哪个字段不为空就添加哪列数据,返回自增主键-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="insertColumn"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <include refid="insertValue"/>
+        </trim>
+    </insert>
+
+    <!--批量插入-->
+    <insert id="insertBatch" useGeneratedKeys="true">
+        insert into user(name, avatar, intro, phone, phone_linked, openid, wechat_linked, following_count,
+        followers_count, created_at, updated_at, deleted_at)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.avatar}, #{entity.intro}, #{entity.phone}, #{entity.phoneLinked},
+            #{entity.openid}, #{entity.wechatLinked}, #{entity.followingCount}, #{entity.followersCount},
+            #{entity.createdAt}, #{entity.updatedAt}, #{entity.deletedAt})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" useGeneratedKeys="true">
+        insert into user(name, avatar, intro, phone, phone_linked, openid, wechat_linked, following_count,
+        followers_count, created_at, updated_at, deleted_at)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.avatar}, #{entity.intro}, #{entity.phone}, #{entity.phoneLinked},
+            #{entity.openid}, #{entity.wechatLinked}, #{entity.followingCount}, #{entity.followersCount},
+            #{entity.createdAt}, #{entity.updatedAt}, #{entity.deletedAt})
+        </foreach>
+        on duplicate key update
+        name = values(name),
+        avatar = values(avatar),
+        intro = values(intro),
+        phone = values(phone),
+        phone_linked = values(phone_linked),
+        openid = values(openid),
+        wechat_linked = values(wechat_linked),
+        following_count = values(following_count),
+        followers_count = values(followers_count),
+        created_at = values(created_at),
+        updated_at = values(updated_at),
+        deleted_at = values(deleted_at)
+    </insert>
+
+</mapper>
+

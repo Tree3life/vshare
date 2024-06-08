@@ -1,0 +1,38 @@
+server:
+  port: 9001
+
+spring:
+  application:
+    name: VSHARE-COMMONS
+#spring.profiles.active=dev
+#
+### 开启aop(默认为true)
+##spring.aop.auto=true
+##
+### 开启CGLib代理(true:启用cglib代理，false:启用jdk代理，默认为false)
+##spring.aop.proxy-target-class=true
+#
+##spring.redis.port=6379
+##spring.redis.host=localhost
+##spring.redis.database=0
+#
+#
+##指定日志
+##日志文件的路径
+#logging.file.path="F:\\codespace\\backEndSpace\\trunk\\log\\spring.log"
+##控制台日志格式
+#logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n
+##指定 不同包下的日志级别
+#logging.level.root=warn
+#logging.level.com.tree3.*=debug
+#logging.level.life.tree3.trunk.config=info
+#logging.level.life.tree3.trunk.setting=info
+
+#添加自定义配置 com.tree3.config.AppProperties
+#app:
+#  salt: zbhqmlldf,
+#  hash-iterations: 1024
+#  show-case: true
+#  jwtSecret: ajkdfhuiU
+#  #1000*60*60=3600000: 1秒*60*60=1小时
+#  effectiveTime: 3600000

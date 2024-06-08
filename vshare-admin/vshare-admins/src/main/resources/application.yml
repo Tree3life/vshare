@@ -1,0 +1,35 @@
+server:
+  port: 9002
+
+
+spring:
+  application:
+    name: API-ADMINS
+  cloud:
+    nacos:
+      server-addr: 192.168.154.101:8848
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.154.101:3306/vshare?characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: root
+
+  redis:
+    host: 192.168.154.101
+    port: 6379
+
+mybatis:
+#  mapper-locations: classpath:com/tree3/mapper/*Mapper.xml
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: com.tree3.mapper.pojo.entity
+
+
+
+logging:
+  level:
+    com.tree3.dao: debug
+    com.tree3.controller: debug
+##日志文件的路径
+#logging.file.path="F:\\codespace\\backEndSpace\\trunk\\log\\spring.log"
+##控制台日志格式
+#logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n
