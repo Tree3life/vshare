@@ -11,6 +11,7 @@ import java.io.InputStream;
 
 public class OSSUtils {
 
+    // fixme：需要将此处修改为自己的阿里云配置 (Rupert，2024/6/8 20:43)
     private static String ACCESSKEYID = "xxxxxxxxxxxxxxx";
     private static String SECRET = "xxxxxxxxxxxx";
     private static String BUCKET_NAME = "xxxxxxxxxx";
